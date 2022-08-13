@@ -1,5 +1,6 @@
 import "./App.css";
 import { Home } from "./screens/Home";
+import { Weather } from "./screens/Weather";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -10,7 +11,7 @@ function App() {
           {/* <Route path="/" element={<App />} /> */}
           <Route path="/" element={<Home />} />
           <Route path="/Home" element={<Home />} />
-
+          <Route path="/Weather" element={<Weather />} />
           <Route
             path="*"
             element={
