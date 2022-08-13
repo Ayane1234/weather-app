@@ -4,12 +4,17 @@ import CloudyWhite from "../img/cloudy_white.svg";
 import SunnyBlack from "../img/sunny_black.svg";
 import CloudyBlack from "../img/cloudy_black.svg";
 import Book from "../img/book.png";
+import BackIcon from "../img/back-icon.svg";
 
 export const Weather = () => {
   return (
     <div>
       <div style={styles.body}>
-        <wrapper style={styles.headerWrapper}>ヘッダー</wrapper>
+        <wrapper style={styles.headerWrapper}>
+          <div>
+            <img src={BackIcon} alt="バックアイコン" style={styles.backIcon} />
+          </div>
+        </wrapper>
         <wrapper style={styles.contentsWrapper}>
           <section style={styles.todaySection}>
             <div style={styles.todayContents}>
@@ -124,6 +129,11 @@ const styles = {
     left: 0,
     height: 40,
     width: "100%",
+  },
+  backIcon: {
+    margin: 10,
+    width: 20,
+    height: 20,
   },
   contentsWrapper: {
     display: "flex",
