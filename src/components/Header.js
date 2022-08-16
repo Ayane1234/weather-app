@@ -2,9 +2,9 @@ import React from "react";
 
 export const Header = ({ title }) => {
   return (
-    <wrapper style={styles.headerWrapper}>
+    <section style={styles.headerWrapper}>
       <div style={styles.headerTitle}> {title} </div>
-    </wrapper>
+    </section>
   );
 };
 const styles = {
@@ -17,8 +17,8 @@ const styles = {
     width: "100%",
   },
   headerTitle: {
-    // margin: 5,
-    // display: "flex",
-    // justifyContent: "center",
+    margin: 5,
+    display: "flex",
+    justifyContent: "center",
   },
 };

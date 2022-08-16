@@ -1,32 +1,26 @@
 import React from "react";
 import { Header } from "../components/Header";
+import { prefectures } from "../display/prefectures";
+import { RegionCard } from "../components/RegionCard";
 
 export const Home = () => {
   // const apikey = "ca3f6ffe199e9fd3f27d3d022faeef47";
+  console.log("prefectures:", prefectures);
+  const Tohoku = prefectures.tohoku.map((prefecture) => {
+    console.log(prefecture);
+  });
   return (
     <div style={styles.body}>
       <Header title="お天気検索アプリ" />
-      {/* <wrapper style={styles.contentsWrapper}> */}
-      <wrapper>
+
+      <div>
         <div style={styles.contentsTitleWrapper}>
           <div style={styles.contentsTitle}>都道府県でえらぶ</div>
         </div>
         <section style={styles.contentsWrapper}>
           <div style={styles.regionWrapper}>
-            <div style={styles.regionCardBlue}>
-              <div style={styles.regionTitleSection}>
-                <div>北海道・東北地方</div>
-              </div>
-              <div style={styles.prifectureSection}>
-                <div style={styles.prefecture}>北海道</div>
-                <div style={styles.prefecture}>青森</div>
-                <div style={styles.prefecture}>岩手</div>
-                <div style={styles.prefecture}>秋田</div>
-                <div style={styles.prefecture}>山形</div>
-                <div style={styles.prefecture}>福島</div>
-                <div style={styles.prefecture}>宮城</div>
-              </div>
-            </div>
+            <RegionCard prefectures={prefectures} />
+
             <div style={styles.regionCardLightBlue}>
               <div style={styles.regionTitleSection}>
                 <div>関東地方</div>
@@ -73,7 +67,7 @@ export const Home = () => {
             </div>
           </div>
         </section>
-      </wrapper>
+      </div>
     </div>
   );
 };
