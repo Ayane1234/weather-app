@@ -17,8 +17,8 @@ const styles = {
     width: "100%",
   },
   headerTitle: {
-    margin: 5,
-    display: "flex",
-    justifyContent: "center",
+    // margin: 5,
+    // display: "flex",
+    // justifyContent: "center",
   },
 };

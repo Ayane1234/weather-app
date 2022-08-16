@@ -5,22 +5,67 @@ import SunnyBlack from "../img/sunny_black.svg";
 import CloudyBlack from "../img/cloudy_black.svg";
 import Book from "../img/book.png";
 import BackIcon from "../img/back-icon.svg";
+import { testData } from "../api/testDataApi";
+import { dateFormat } from "../function/dateFormat";
+import { commentUnit } from "../comment-unit/commentUnit";
 
 export const Weather = () => {
+  //　APIで取得するときは、摂氏で取得するパラメータをつける"&units=metric"
+  // 9:38に取得したテストデータ
+  console.log("testData:", testData);
+  const getForecastTimestamp = testData.list[0].dt;
+  const getForecastCurrentTimeObject = new Date(getForecastTimestamp * 1000);
+  const getForecastCurrentTime = dateFormat(
+    getForecastCurrentTimeObject,
+    "YYYY-MM-DD hh"
+  );
+
+  const today = new Date("2022/8/145 19:39:50");
+  const currentTime = dateFormat(today, "YYYY-MM-DD hh");
+
+  let currentTemp = "";
+  if (getForecastCurrentTime === currentTime) {
+    console.log(testData.list[0].dt_txt);
+    currentTemp = testData.list[0].main.temp;
+  } else {
+    console.log(testData.list[1].dt_txt);
+    currentTemp = testData.list[1].main.temp;
+    console.log("currentTemp:", currentTemp);
+  }
+
+  // 表示用日付の取得
+  const currentDate = today.getDate();
+  const currentMonth = today.getMonth() + 1;
+  const currentDay = today.getDay();
+  const weekday = ["日", "月", "火", "水", "木", "金", "土"];
+
+  const displayCurrentDay = weekday[currentDay];
+  const displayCurrentMonth = ("0" + currentMonth).slice(-2);
+  const displayCurrentDate = ("0" + currentDate).slice(-2);
+  const displayToday = `${displayCurrentMonth}.${displayCurrentDate}`;
+
+  // 表示用明日の日付の取得
+  const tommorrowDate = today.getDate() + 1;
+  const tommorrowMonth = today.getMonth() + 1;
+
+  const displayTommorrowDate = ("0" + tommorrowDate).slice(-2);
+  const displayTommorrowMonth = ("0" + tommorrowMonth).slice(-2);
+
+  const displayTommorrow = `${displayTommorrowMonth}.${displayTommorrowDate}`;
+
   return (
     <div>
       <div style={styles.body}>
-        <wrapper style={styles.headerWrapper}>
-          <div>
-            <img src={BackIcon} alt="バックアイコン" style={styles.backIcon} />
-          </div>
-        </wrapper>
-        <wrapper style={styles.contentsWrapper}>
+        <section style={styles.headerWrapper}>
+          <img src={BackIcon} alt="バックアイコン" style={styles.backIcon} />
+          <div style={styles.regionName}>秋田県の天気</div>
+        </section>
+        <section style={styles.contentsWrapper}>
           <section style={styles.todaySection}>
             <div style={styles.todayContents}>
               <div style={styles.dateContents}>
-                <div style={styles.todayDate}>08.31</div>
-                <div style={styles.todayDay}>(水)</div>
+                <div style={styles.todayDate}>{displayToday}</div>
+                <div style={styles.todayDay}>({displayCurrentDay})</div>
               </div>
               <div style={styles.todayWeather}>
                 <div style={styles.currentWeatherSection}>
@@ -28,7 +73,10 @@ export const Weather = () => {
                   <div style={styles.todayWeatherDetail}>
                     <img src={SunnyWhite} alt="晴れ" />
                   </div>
-                  <div style={styles.todayWeatherTemp}>30.0℃</div>
+                  <div style={styles.todayWeatherTemp}>
+                    {currentTemp}
+                    {commentUnit.unit.temp}
+                  </div>
                 </div>
 
                 <div style={styles.threeHourWeatherSection}>
@@ -53,7 +101,9 @@ export const Weather = () => {
           <section style={styles.tommorrowMainSection}>
             <div style={styles.tommorrowContents}>
               <div style={styles.tomorrowDateContents}>
-                <div style={styles.tomorrowDate}>明日の天気(09.01)</div>
+                <div style={styles.tomorrowDate}>
+                  明日の天気({displayTommorrow})
+                </div>
               </div>
               <div style={styles.tommorrowWeatherContents}>
                 <div style={styles.tommorrowWeather}>
@@ -109,7 +159,7 @@ export const Weather = () => {
               </div>
             </div>
           </section>
-        </wrapper>
+        </section>
       </div>
     </div>
   );
@@ -124,16 +174,26 @@ const styles = {
   },
   headerWrapper: {
     backgroundColor: "white",
+    display: "flex",
+    justifyContent: "center",
     position: "fixed",
     top: 0,
     left: 0,
     height: 40,
     width: "100%",
+    // padding: 5,
   },
   backIcon: {
     margin: 10,
     width: 20,
     height: 20,
+    top: 0,
+    left: 0,
+    display: "block",
+    position: "fixed",
+  },
+  regionName: {
+    margin: 5,
   },
   contentsWrapper: {
     display: "flex",
@@ -144,6 +204,7 @@ const styles = {
     marginTop: 40,
     // border: "1px solid",
   },
+
   todaySection: {
     backgroundColor: "#2C6FF1",
     borderRadius: "30px",
@@ -190,7 +251,7 @@ const styles = {
     width: "30%",
     height: "70%",
     // border: "1px solid white",
-    fontSize: "15px",
+    fontSize: "18px",
     color: "white",
     display: "flex",
     flexDirection: "column",
