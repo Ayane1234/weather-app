@@ -1039,3 +1039,4 @@ export const testData = {
 //     clouds:"どんよりした日になりそう"
 // }
 // 単位もjsonファイルに入れて、呼び出す
+//
