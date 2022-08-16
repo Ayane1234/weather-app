@@ -7,7 +7,7 @@ import Book from "../img/book.png";
 import BackIcon from "../img/back-icon.svg";
 import { testData } from "../api/testDataApi";
 import { dateFormat } from "../function/dateFormat";
-import { commentUnit } from "../comment-unit/commentUnit";
+import { commentUnit } from "../display/commentUnit";
 
 export const Weather = () => {
   //　APIで取得するときは、摂氏で取得するパラメータをつける"&units=metric"
