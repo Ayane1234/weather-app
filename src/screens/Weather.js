@@ -1,6 +1,9 @@
 import React from "react";
 import SunnyWhite from "../img/sunny_white.svg";
 import CloudyWhite from "../img/cloudy_white.svg";
+import RainyWhite from "../img/rainy_white.svg";
+import CloudySunnyWhite from "../img/cloudy_sunny_white.svg";
+import SnowyWhite from "../img/snowy_white.svg";
 import SunnyBlack from "../img/sunny_black.svg";
 import CloudyBlack from "../img/cloudy_black.svg";
 import Book from "../img/book.png";
@@ -19,19 +22,66 @@ export const Weather = () => {
     getForecastCurrentTimeObject,
     "YYYY-MM-DD hh"
   );
-
-  const today = new Date("2022/8/145 19:39:50");
+  const today = new Date("2022/8/15 19:39:50");
   const currentTime = dateFormat(today, "YYYY-MM-DD hh");
+  console.log(" getForecastCurrentTime:", currentTime);
 
   let currentTemp = "";
+  let currentWeather = "";
+  let getForecastCurrentWeather = "";
+  let currentWeatherIcon = "";
   if (getForecastCurrentTime === currentTime) {
-    console.log(testData.list[0].dt_txt);
     currentTemp = testData.list[0].main.temp;
   } else {
-    console.log(testData.list[1].dt_txt);
     currentTemp = testData.list[1].main.temp;
-    console.log("currentTemp:", currentTemp);
+    getForecastCurrentWeather = 600;
+    // getForecastCurrentWeather = testData.list[1].weather[0].id;
+    console.log("getForecastCurrentWeather:", getForecastCurrentWeather);
+
+    if (getForecastCurrentWeather === 800) {
+      currentWeather = "晴れ";
+      currentWeatherIcon = SunnyWhite;
+    } else if (getForecastCurrentWeather === 801) {
+      currentWeather = "晴れときどき曇り";
+      currentWeatherIcon = CloudySunnyWhite;
+    } else if (
+      802 <= getForecastCurrentWeather &&
+      getForecastCurrentWeather < 805
+    ) {
+      currentWeather = "曇り";
+      currentWeatherIcon = CloudyWhite;
+    } else if (
+      701 <= getForecastCurrentWeather &&
+      getForecastCurrentWeather < 782
+    ) {
+      currentWeather = "靄";
+    } else if (
+      600 <= getForecastCurrentWeather &&
+      getForecastCurrentWeather < 623
+    ) {
+      currentWeather = "雪";
+      currentWeatherIcon = SnowyWhite;
+    } else if (
+      500 <= getForecastCurrentWeather &&
+      getForecastCurrentWeather < 532
+    ) {
+      currentWeather = "雨";
+      currentWeatherIcon = RainyWhite;
+    } else if (
+      300 <= getForecastCurrentWeather &&
+      getForecastCurrentWeather < 322
+    ) {
+      currentWeather = "霧雨";
+    } else if (
+      200 <= getForecastCurrentWeather &&
+      getForecastCurrentWeather < 233
+    ) {
+      currentWeather = "雷雨";
+    } else {
+      currentWeather = "その他";
+    }
   }
+  console.log("currentWeather:", currentWeather);
 
   // 表示用日付の取得
   const currentDate = today.getDate();
@@ -71,7 +121,7 @@ export const Weather = () => {
                 <div style={styles.currentWeatherSection}>
                   <div style={styles.timeTiltle}>現在</div>
                   <div style={styles.todayWeatherDetail}>
-                    <img src={SunnyWhite} alt="晴れ" />
+                    <img src={currentWeatherIcon} alt="天気" />
                   </div>
                   <div style={styles.todayWeatherTemp}>
                     {currentTemp}
