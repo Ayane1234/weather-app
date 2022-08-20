@@ -6,82 +6,61 @@ import CloudySunnyWhite from "../img/cloudy_sunny_white.svg";
 import SnowyWhite from "../img/snowy_white.svg";
 import SunnyBlack from "../img/sunny_black.svg";
 import CloudyBlack from "../img/cloudy_black.svg";
+import RainyBlack from "../img/rainy_black.svg";
 import Book from "../img/book.png";
 import BackIcon from "../img/back-icon.svg";
 import { testData } from "../api/testDataApi";
 import { dateFormat } from "../function/dateFormat";
+import { setWeather } from "../function/setWeather";
 import { commentUnit } from "../display/commentUnit";
+import { WeatherIcon } from "../components/WeatherIcon";
+import { FormControlUnstyledContext } from "@mui/base";
 
 export const Weather = () => {
   //　APIで取得するときは、摂氏で取得するパラメータをつける"&units=metric"
-  // 9:38に取得したテストデータ
-  console.log("testData:", testData);
+  // 8-15 9:38のデータ
+  // console.log(
+  //   "testData.list[2].weather[0].id:",
+  //   testData.list[2].weather[0].id
+  // );
+  // console.log("testData.list[1]:", testData.list[1]);
+
   const getForecastTimestamp = testData.list[0].dt;
   const getForecastCurrentTimeObject = new Date(getForecastTimestamp * 1000);
   const getForecastCurrentTime = dateFormat(
     getForecastCurrentTimeObject,
     "YYYY-MM-DD hh"
   );
-  const today = new Date("2022/8/15 19:39:50");
+  const today = new Date("2022/8/15 21:38:50");
   const currentTime = dateFormat(today, "YYYY-MM-DD hh");
-  console.log(" getForecastCurrentTime:", currentTime);
+  // console.log("日本時間currentTime:", currentTime);
+  // console.log("UTCを日本時間にした天気予報時間", getForecastCurrentTime);
 
+  // 今日の天気の取得
   let currentTemp = "";
-  let currentWeather = "";
-  let getForecastCurrentWeather = "";
-  let currentWeatherIcon = "";
+  let threeHourTemp = "";
+  let sixHourTemp = "";
+  let currentWeatherId = "";
+  let threeHourWeatherId = "";
+  let sixHourWeatherId = "";
+
   if (getForecastCurrentTime === currentTime) {
     currentTemp = testData.list[0].main.temp;
+    threeHourTemp = testData.list[1].main.temp;
+    sixHourTemp = testData.list[2].main.temp;
+
+    currentWeatherId = testData.list[0].weather[0].id;
+    threeHourWeatherId = testData.list[1].weather[0].id;
+    sixHourWeatherId = testData.list[2].weather[0].id;
   } else {
     currentTemp = testData.list[1].main.temp;
-    getForecastCurrentWeather = 600;
-    // getForecastCurrentWeather = testData.list[1].weather[0].id;
-    console.log("getForecastCurrentWeather:", getForecastCurrentWeather);
+    threeHourTemp = testData.list[2].main.temp;
+    sixHourTemp = testData.list[3].main.temp;
 
-    if (getForecastCurrentWeather === 800) {
-      currentWeather = "晴れ";
-      currentWeatherIcon = SunnyWhite;
-    } else if (getForecastCurrentWeather === 801) {
-      currentWeather = "晴れときどき曇り";
-      currentWeatherIcon = CloudySunnyWhite;
-    } else if (
-      802 <= getForecastCurrentWeather &&
-      getForecastCurrentWeather < 805
-    ) {
-      currentWeather = "曇り";
-      currentWeatherIcon = CloudyWhite;
-    } else if (
-      701 <= getForecastCurrentWeather &&
-      getForecastCurrentWeather < 782
-    ) {
-      currentWeather = "靄";
-    } else if (
-      600 <= getForecastCurrentWeather &&
-      getForecastCurrentWeather < 623
-    ) {
-      currentWeather = "雪";
-      currentWeatherIcon = SnowyWhite;
-    } else if (
-      500 <= getForecastCurrentWeather &&
-      getForecastCurrentWeather < 532
-    ) {
-      currentWeather = "雨";
-      currentWeatherIcon = RainyWhite;
-    } else if (
-      300 <= getForecastCurrentWeather &&
-      getForecastCurrentWeather < 322
-    ) {
-      currentWeather = "霧雨";
-    } else if (
-      200 <= getForecastCurrentWeather &&
-      getForecastCurrentWeather < 233
-    ) {
-      currentWeather = "雷雨";
-    } else {
-      currentWeather = "その他";
-    }
+    currentWeatherId = testData.list[1].weather[0].id;
+    threeHourWeatherId = testData.list[2].weather[0].id;
+    sixHourWeatherId = testData.list[3].weather[0].id;
   }
-  console.log("currentWeather:", currentWeather);
 
   // 表示用日付の取得
   const currentDate = today.getDate();
@@ -95,13 +74,47 @@ export const Weather = () => {
   const displayToday = `${displayCurrentMonth}.${displayCurrentDate}`;
 
   // 表示用明日の日付の取得
-  const tommorrowDate = today.getDate() + 1;
+  const tommorrowDate = today.getDate() + 1; //このままだと、31日の次が、32になる。
   const tommorrowMonth = today.getMonth() + 1;
 
   const displayTommorrowDate = ("0" + tommorrowDate).slice(-2);
   const displayTommorrowMonth = ("0" + tommorrowMonth).slice(-2);
 
   const displayTommorrow = `${displayTommorrowMonth}.${displayTommorrowDate}`;
+
+  // 明日の天気の取得
+  const tommorrow = new Date("2022/8/15 9:38:50");
+  tommorrow.setDate(tommorrow.getDate() + 1);
+  const formatedTommorrow = dateFormat(tommorrow, "YYYY-MM-DD");
+  const formatedToday = dateFormat(today, "YYYY-MM-DD");
+
+  const tommorrowMorningTime = formatedToday.concat(" 21:00:00");
+  const tommorrowNoonTime = formatedTommorrow.concat(" 03:00:00");
+  const tommorrowNightTime = formatedTommorrow.concat(" 12:00:00");
+  console.log("tommorrowNightTime:", tommorrowNightTime);
+  const tommorowMorningForecast = testData.list.filter(
+    (list) => list.dt_txt === tommorrowMorningTime
+  );
+
+  const tommorrowNoonForeast = testData.list.filter(
+    (list) => list.dt_txt === tommorrowNoonTime
+  );
+
+  const tommorrowNightForecast = testData.list.filter(
+    (list) => list.dt_txt === tommorrowNightTime
+  );
+  console.log("tommorrowNightForecast:", tommorrowNightForecast);
+
+  const tommorrowNightTimestamp = tommorrowNightForecast[0].dt;
+  console.log("tommorrowNightTimestamp:", tommorrowNightTimestamp);
+  const tommorrowNightJapanTime = new Date(tommorrowNightTimestamp * 1000);
+  console.log("tommorrowNightJapanTime:", tommorrowNightJapanTime);
+
+  const tommorrowMorningTemp = tommorowMorningForecast[0].main.temp;
+  const tommorrowNoonTemp = tommorrowNoonForeast[0].main.temp;
+  const tommorrowNightTemp = tommorrowNightForecast[0].main.temp;
+  // 天気予報の前日の21:00が、日本時間の翌日6:00になる
+  // console.log(":", new Date(tommorrow * 1000));
 
   return (
     <div>
@@ -121,7 +134,7 @@ export const Weather = () => {
                 <div style={styles.currentWeatherSection}>
                   <div style={styles.timeTiltle}>現在</div>
                   <div style={styles.todayWeatherDetail}>
-                    <img src={currentWeatherIcon} alt="天気" />
+                    <WeatherIcon weatherId={currentWeatherId} />
                   </div>
                   <div style={styles.todayWeatherTemp}>
                     {currentTemp}
@@ -132,17 +145,23 @@ export const Weather = () => {
                 <div style={styles.threeHourWeatherSection}>
                   <div style={styles.timeTiltle}>3時間後</div>
                   <div style={styles.todayWeatherDetail}>
-                    <img src={CloudyWhite} alt="くもり" />
+                    <WeatherIcon weatherId={threeHourWeatherId} />
                   </div>
-                  <div style={styles.todayWeatherTemp}>29.0℃</div>
+                  <div style={styles.todayWeatherTemp}>
+                    {threeHourTemp}
+                    {commentUnit.unit.temp}
+                  </div>
                 </div>
 
                 <div style={styles.sixHourWeatherSection}>
                   <div style={styles.timeTiltle}>6時間後</div>
                   <div style={styles.todayWeatherDetail}>
-                    <img src={CloudyWhite} alt="くもり" />
+                    <WeatherIcon weatherId={sixHourWeatherId} />
                   </div>
-                  <div style={styles.todayWeatherTemp}>29.0℃</div>
+                  <div style={styles.todayWeatherTemp}>
+                    {sixHourTemp}
+                    {commentUnit.unit.temp}
+                  </div>
                 </div>
               </div>
             </div>
@@ -161,21 +180,30 @@ export const Weather = () => {
                   <div style={styles.tommorrowForcast}>
                     <img src={SunnyBlack} alt="晴れ" />
                   </div>
-                  <div style={styles.tommorowWeatherTemp}>30.0℃</div>
+                  <div style={styles.tommorowWeatherTemp}>
+                    {tommorrowMorningTemp}
+                    {commentUnit.unit.temp}
+                  </div>
                 </div>
                 <div style={styles.tommorrowWeather}>
                   <div style={styles.timeTiltle}>昼</div>
                   <div style={styles.tommorrowForcast}>
                     <img src={SunnyBlack} alt="晴れ" />
                   </div>
-                  <div style={styles.tommorowWeatherTemp}>30.0℃</div>
+                  <div style={styles.tommorowWeatherTemp}>
+                    {tommorrowNoonTemp}
+                    {commentUnit.unit.temp}
+                  </div>
                 </div>
                 <div style={styles.tommorrowWeather}>
                   <div style={styles.timeTiltle}>夜</div>
                   <div style={styles.tommorrowForcast}>
                     <img src={CloudyBlack} alt="晴れ" />
                   </div>
-                  <div style={styles.tommorowWeatherTemp}>28.0℃</div>
+                  <div style={styles.tommorowWeatherTemp}>
+                    {tommorrowNightTemp}
+                    {commentUnit.unit.temp}
+                  </div>
                 </div>
               </div>
             </div>
