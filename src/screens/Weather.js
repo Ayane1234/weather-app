@@ -91,7 +91,7 @@ export const Weather = () => {
   const tommorrowMorningTime = formatedToday.concat(" 21:00:00");
   const tommorrowNoonTime = formatedTommorrow.concat(" 03:00:00");
   const tommorrowNightTime = formatedTommorrow.concat(" 12:00:00");
-  console.log("tommorrowNightTime:", tommorrowNightTime);
+  // console.log("tommorrowNightTime:", tommorrowNightTime);
   const tommorowMorningForecast = testData.list.filter(
     (list) => list.dt_txt === tommorrowMorningTime
   );
@@ -103,16 +103,23 @@ export const Weather = () => {
   const tommorrowNightForecast = testData.list.filter(
     (list) => list.dt_txt === tommorrowNightTime
   );
-  console.log("tommorrowNightForecast:", tommorrowNightForecast);
 
   const tommorrowNightTimestamp = tommorrowNightForecast[0].dt;
-  console.log("tommorrowNightTimestamp:", tommorrowNightTimestamp);
+  // console.log("tommorrowNightTimestamp:", tommorrowNightTimestamp);
   const tommorrowNightJapanTime = new Date(tommorrowNightTimestamp * 1000);
-  console.log("tommorrowNightJapanTime:", tommorrowNightJapanTime);
 
   const tommorrowMorningTemp = tommorowMorningForecast[0].main.temp;
+  const tommorrowMorningWeatherId = tommorowMorningForecast[0].weather[0].id;
+
   const tommorrowNoonTemp = tommorrowNoonForeast[0].main.temp;
+  const tommorrowNoonWeatherId = tommorrowNoonForeast[0].weather[0].id;
+
   const tommorrowNightTemp = tommorrowNightForecast[0].main.temp;
+  const tommorrowNightWeatherId = tommorrowNightForecast[0].weather[0].id;
+  console.log("tommorrowNoonForecast:", tommorrowNoonForeast);
+
+  const tommorrowHumidity = tommorrowNoonForeast[0].main.humidity;
+  const tommorrowPressure = tommorowMorningForecast[0].main.pressure;
   // 天気予報の前日の21:00が、日本時間の翌日6:00になる
   // console.log(":", new Date(tommorrow * 1000));
 
@@ -134,7 +141,7 @@ export const Weather = () => {
                 <div style={styles.currentWeatherSection}>
                   <div style={styles.timeTiltle}>現在</div>
                   <div style={styles.todayWeatherDetail}>
-                    <WeatherIcon weatherId={currentWeatherId} />
+                    <WeatherIcon weatherId={currentWeatherId} date="today" />
                   </div>
                   <div style={styles.todayWeatherTemp}>
                     {currentTemp}
@@ -145,7 +152,7 @@ export const Weather = () => {
                 <div style={styles.threeHourWeatherSection}>
                   <div style={styles.timeTiltle}>3時間後</div>
                   <div style={styles.todayWeatherDetail}>
-                    <WeatherIcon weatherId={threeHourWeatherId} />
+                    <WeatherIcon weatherId={threeHourWeatherId} date="today" />
                   </div>
                   <div style={styles.todayWeatherTemp}>
                     {threeHourTemp}
@@ -156,7 +163,7 @@ export const Weather = () => {
                 <div style={styles.sixHourWeatherSection}>
                   <div style={styles.timeTiltle}>6時間後</div>
                   <div style={styles.todayWeatherDetail}>
-                    <WeatherIcon weatherId={sixHourWeatherId} />
+                    <WeatherIcon weatherId={sixHourWeatherId} date="today" />
                   </div>
                   <div style={styles.todayWeatherTemp}>
                     {sixHourTemp}
@@ -178,7 +185,10 @@ export const Weather = () => {
                 <div style={styles.tommorrowWeather}>
                   <div style={styles.timeTiltle}>朝</div>
                   <div style={styles.tommorrowForcast}>
-                    <img src={SunnyBlack} alt="晴れ" />
+                    <WeatherIcon
+                      weatherId={tommorrowMorningWeatherId}
+                      date="tommorrow"
+                    />
                   </div>
                   <div style={styles.tommorowWeatherTemp}>
                     {tommorrowMorningTemp}
@@ -188,7 +198,11 @@ export const Weather = () => {
                 <div style={styles.tommorrowWeather}>
                   <div style={styles.timeTiltle}>昼</div>
                   <div style={styles.tommorrowForcast}>
-                    <img src={SunnyBlack} alt="晴れ" />
+                    <WeatherIcon
+                      weatherId={tommorrowNoonWeatherId}
+                      date="tommorrow"
+                    />
+                    {/* <img src={SunnyBlack} alt="晴れ" /> */}
                   </div>
                   <div style={styles.tommorowWeatherTemp}>
                     {tommorrowNoonTemp}
@@ -198,7 +212,11 @@ export const Weather = () => {
                 <div style={styles.tommorrowWeather}>
                   <div style={styles.timeTiltle}>夜</div>
                   <div style={styles.tommorrowForcast}>
-                    <img src={CloudyBlack} alt="晴れ" />
+                    <WeatherIcon
+                      weatherId={tommorrowNightWeatherId}
+                      date="tommorrow"
+                    />
+                    {/* <img src={CloudyBlack} alt="晴れ" /> */}
                   </div>
                   <div style={styles.tommorowWeatherTemp}>
                     {tommorrowNightTemp}
@@ -224,11 +242,17 @@ export const Weather = () => {
               <div style={styles.tommorrowDetailContents}>
                 <div style={styles.tommorrowDetail}>
                   <p>湿度</p>
-                  <p>60%</p>
+                  <p>
+                    {tommorrowHumidity}
+                    {commentUnit.unit.humidity}
+                  </p>
                 </div>
                 <div style={styles.tommorrowDetail}>
                   <p>気圧</p>
-                  <p>1000.0mb</p>
+                  <p>
+                    {tommorrowPressure}
+                    {commentUnit.unit.pressure}
+                  </p>
                 </div>
                 <div style={styles.tommorrowDetail}>
                   <p>風</p>
