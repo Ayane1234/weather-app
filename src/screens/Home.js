@@ -19,52 +19,41 @@ export const Home = () => {
         </div>
         <section style={styles.contentsWrapper}>
           <div style={styles.regionWrapper}>
-            <RegionCard prefectures={prefectures} />
-
-            <div style={styles.regionCardLightBlue}>
-              <div style={styles.regionTitleSection}>
-                <div>関東地方</div>
-              </div>
-              <div style={styles.prifectureSection}>
-                <div style={styles.prefecture}>東京</div>
-                <div style={styles.prefecture}>神奈川</div>
-                <div style={styles.prefecture}>埼玉</div>
-                <div style={styles.prefecture}>千葉</div>
-                <div style={styles.prefecture}>群馬</div>
-                <div style={styles.prefecture}>栃木</div>
-                <div style={styles.prefecture}>茨城</div>
-              </div>
-            </div>
-            <div style={styles.regionCardPurple}>
-              <div style={styles.regionTitleSection}>
-                <div>中部地方</div>
-              </div>
-              <div style={styles.prifectureSection}>
-                <div style={styles.prefecture}>静岡</div>
-                <div style={styles.prefecture}>山梨</div>
-                <div style={styles.prefecture}>愛知</div>
-                <div style={styles.prefecture}>長野</div>
-                <div style={styles.prefecture}>新潟</div>
-                <div style={styles.prefecture}>岐阜</div>
-                <div style={styles.prefecture}>富山</div>
-                <div style={styles.prefecture}>石川</div>
-                <div style={styles.prefecture}>福井</div>
-              </div>
-            </div>
-            <div style={styles.regionCardBlue}>
-              <div style={styles.regionTitleSection}>
-                <div>関西地方</div>
-              </div>
-              <div style={styles.prifectureSection}>
-                <div style={styles.prefecture}>大阪</div>
-                <div style={styles.prefecture}>京都</div>
-                <div style={styles.prefecture}>神戸</div>
-                <div style={styles.prefecture}>滋賀</div>
-                <div style={styles.prefecture}>奈良</div>
-                <div style={styles.prefecture}>和歌山</div>
-                <div style={styles.prefecture}>三重</div>
-              </div>
-            </div>
+            <RegionCard
+              prefectures={prefectures.tohoku}
+              region="北海道・東北"
+              color="blue"
+            />
+            <RegionCard
+              prefectures={prefectures.kanto}
+              region="関東"
+              color="lightBlue"
+            />
+            <RegionCard
+              prefectures={prefectures.chubu}
+              region="中部"
+              color="purple"
+            />
+            <RegionCard
+              prefectures={prefectures.kansai}
+              region="関西"
+              color="blue"
+            />
+            <RegionCard
+              prefectures={prefectures.chugoku}
+              region="中国"
+              color="lightBlue"
+            />
+            <RegionCard
+              prefectures={prefectures.shikoku}
+              region="四国"
+              color="purple"
+            />
+            <RegionCard
+              prefectures={prefectures.kyusyu}
+              region="九州・沖縄"
+              color="blue"
+            />
           </div>
         </section>
       </div>

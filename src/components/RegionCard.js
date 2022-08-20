@@ -1,15 +1,22 @@
 import React from "react";
 import { PrefectureButton } from "./PrefectureButton";
 
-export const RegionCard = ({ prefectures }) => {
-  console.log("props:", prefectures);
+export const RegionCard = ({ prefectures, region, color }) => {
   return (
-    <div style={styles.regionCardBlue}>
+    <div
+      style={
+        color === "blue"
+          ? styles.regionCardBlue
+          : color === "lightBlue"
+          ? styles.regionCardLightBlue
+          : styles.regionCardPurple
+      }
+    >
       <div style={styles.regionTitleSection}>
-        <div>北海道・東北地方</div>
+        <div>{region}地方</div>
       </div>
       <div style={styles.prifectureSection}>
-        {prefectures.tohoku.map((prefecture, index) => {
+        {prefectures.map((prefecture, index) => {
           return <PrefectureButton title={prefecture.prefecture} key={index} />;
         })}
       </div>
@@ -20,6 +27,24 @@ export const RegionCard = ({ prefectures }) => {
 const styles = {
   regionCardBlue: {
     backgroundColor: "#2C6FF1",
+    width: "90%",
+    height: "250px",
+    margin: "5px 0px",
+    // display: "flex",
+    // justifyContent: "center",
+    borderRadius: "30px",
+  },
+  regionCardLightBlue: {
+    backgroundColor: "#74CBEE",
+    width: "90%",
+    height: "250px",
+    margin: "5px 0px",
+    // display: "flex",
+    // justifyContent: "center",
+    borderRadius: "30px",
+  },
+  regionCardPurple: {
+    backgroundColor: "#C0C0F7",
     width: "90%",
     height: "250px",
     margin: "5px 0px",
