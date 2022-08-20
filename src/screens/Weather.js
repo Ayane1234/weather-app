@@ -1,20 +1,12 @@
 import React from "react";
-import SunnyWhite from "../img/sunny_white.svg";
-import CloudyWhite from "../img/cloudy_white.svg";
-import RainyWhite from "../img/rainy_white.svg";
-import CloudySunnyWhite from "../img/cloudy_sunny_white.svg";
-import SnowyWhite from "../img/snowy_white.svg";
-import SunnyBlack from "../img/sunny_black.svg";
-import CloudyBlack from "../img/cloudy_black.svg";
-import RainyBlack from "../img/rainy_black.svg";
+import { TommorrowDetail } from "../components/TommorrowDetail";
 import Book from "../img/book.png";
 import BackIcon from "../img/back-icon.svg";
 import { testData } from "../api/testDataApi";
 import { dateFormat } from "../function/dateFormat";
-import { setWeather } from "../function/setWeather";
+
 import { commentUnit } from "../display/commentUnit";
 import { WeatherIcon } from "../components/WeatherIcon";
-import { FormControlUnstyledContext } from "@mui/base";
 
 export const Weather = () => {
   //　APIで取得するときは、摂氏で取得するパラメータをつける"&units=metric"
@@ -120,8 +112,11 @@ export const Weather = () => {
 
   const tommorrowHumidity = tommorrowNoonForeast[0].main.humidity;
   const tommorrowPressure = tommorowMorningForecast[0].main.pressure;
+
+  const tommorrowWindDirection = tommorrowNoonForeast[0].wind.deg;
+  const tommorrowWindSpeed = tommorrowNoonForeast[0].wind.speed;
   // 天気予報の前日の21:00が、日本時間の翌日6:00になる
-  // console.log(":", new Date(tommorrow * 1000));
+  console.log("風速:", tommorrowWindSpeed);
 
   return (
     <div>
@@ -237,29 +232,13 @@ export const Weather = () => {
                 </div>
               </div>
             </div>
-            <div style={styles.tomorrrowDetailSection}>
-              <div style={styles.tommorrowDetailTitle}>明日の詳細</div>
-              <div style={styles.tommorrowDetailContents}>
-                <div style={styles.tommorrowDetail}>
-                  <p>湿度</p>
-                  <p>
-                    {tommorrowHumidity}
-                    {commentUnit.unit.humidity}
-                  </p>
-                </div>
-                <div style={styles.tommorrowDetail}>
-                  <p>気圧</p>
-                  <p>
-                    {tommorrowPressure}
-                    {commentUnit.unit.pressure}
-                  </p>
-                </div>
-                <div style={styles.tommorrowDetail}>
-                  <p>風</p>
-                  <p>東13kmh</p>
-                </div>
-              </div>
-            </div>
+            <TommorrowDetail
+              tommorrowHumidity={tommorrowHumidity}
+              tommorrowPressure={tommorrowPressure}
+              tommorrowWindDirection={tommorrowWindDirection}
+              tommorrowWindSpeed={tommorrowWindSpeed}
+              unit={commentUnit}
+            />
           </section>
         </section>
       </div>
@@ -474,20 +453,5 @@ const styles = {
     overflowWrap: "break-word",
     clear: "both",
     boxSizing: "content-box",
-  },
-  tomorrrowDetailSection: {
-    width: "45%",
-  },
-  tommorrowDetailTitle: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  tommorrowDetailContents: {
-    padding: 10,
-  },
-  tommorrowDetail: {
-    display: "flex",
-    justifyContent: "space-between",
-    borderBottom: "1px solid #707070",
   },
 };
