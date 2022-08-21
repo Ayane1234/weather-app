@@ -1,30 +1,16 @@
 import React from "react";
-import SunnyWhite from "../img/sunny_white.svg";
-import CloudyWhite from "../img/cloudy_white.svg";
-import RainyWhite from "../img/rainy_white.svg";
-import CloudySunnyWhite from "../img/cloudy_sunny_white.svg";
-import SnowyWhite from "../img/snowy_white.svg";
-import SunnyBlack from "../img/sunny_black.svg";
-import CloudyBlack from "../img/cloudy_black.svg";
-import RainyBlack from "../img/rainy_black.svg";
+import { TommorrowDetail } from "../components/TommorrowDetail";
 import Book from "../img/book.png";
 import BackIcon from "../img/back-icon.svg";
 import { testData } from "../api/testDataApi";
 import { dateFormat } from "../function/dateFormat";
-import { setWeather } from "../function/setWeather";
+
 import { commentUnit } from "../display/commentUnit";
 import { WeatherIcon } from "../components/WeatherIcon";
-import { FormControlUnstyledContext } from "@mui/base";
 
 export const Weather = () => {
   //　APIで取得するときは、摂氏で取得するパラメータをつける"&units=metric"
   // 8-15 9:38のデータ
-  // console.log(
-  //   "testData.list[2].weather[0].id:",
-  //   testData.list[2].weather[0].id
-  // );
-  // console.log("testData.list[1]:", testData.list[1]);
-
   const getForecastTimestamp = testData.list[0].dt;
   const getForecastCurrentTimeObject = new Date(getForecastTimestamp * 1000);
   const getForecastCurrentTime = dateFormat(
@@ -33,8 +19,6 @@ export const Weather = () => {
   );
   const today = new Date("2022/8/15 21:38:50");
   const currentTime = dateFormat(today, "YYYY-MM-DD hh");
-  // console.log("日本時間currentTime:", currentTime);
-  // console.log("UTCを日本時間にした天気予報時間", getForecastCurrentTime);
 
   // 今日の天気の取得
   let currentTemp = "";
@@ -48,7 +32,6 @@ export const Weather = () => {
     currentTemp = testData.list[0].main.temp;
     threeHourTemp = testData.list[1].main.temp;
     sixHourTemp = testData.list[2].main.temp;
-
     currentWeatherId = testData.list[0].weather[0].id;
     threeHourWeatherId = testData.list[1].weather[0].id;
     sixHourWeatherId = testData.list[2].weather[0].id;
@@ -56,7 +39,6 @@ export const Weather = () => {
     currentTemp = testData.list[1].main.temp;
     threeHourTemp = testData.list[2].main.temp;
     sixHourTemp = testData.list[3].main.temp;
-
     currentWeatherId = testData.list[1].weather[0].id;
     threeHourWeatherId = testData.list[2].weather[0].id;
     sixHourWeatherId = testData.list[3].weather[0].id;
@@ -91,7 +73,6 @@ export const Weather = () => {
   const tommorrowMorningTime = formatedToday.concat(" 21:00:00");
   const tommorrowNoonTime = formatedTommorrow.concat(" 03:00:00");
   const tommorrowNightTime = formatedTommorrow.concat(" 12:00:00");
-  // console.log("tommorrowNightTime:", tommorrowNightTime);
   const tommorowMorningForecast = testData.list.filter(
     (list) => list.dt_txt === tommorrowMorningTime
   );
@@ -105,7 +86,6 @@ export const Weather = () => {
   );
 
   const tommorrowNightTimestamp = tommorrowNightForecast[0].dt;
-  // console.log("tommorrowNightTimestamp:", tommorrowNightTimestamp);
   const tommorrowNightJapanTime = new Date(tommorrowNightTimestamp * 1000);
 
   const tommorrowMorningTemp = tommorowMorningForecast[0].main.temp;
@@ -116,13 +96,12 @@ export const Weather = () => {
 
   const tommorrowNightTemp = tommorrowNightForecast[0].main.temp;
   const tommorrowNightWeatherId = tommorrowNightForecast[0].weather[0].id;
-  console.log("tommorrowNoonForecast:", tommorrowNoonForeast);
 
   const tommorrowHumidity = tommorrowNoonForeast[0].main.humidity;
   const tommorrowPressure = tommorowMorningForecast[0].main.pressure;
-  // 天気予報の前日の21:00が、日本時間の翌日6:00になる
-  // console.log(":", new Date(tommorrow * 1000));
 
+  const tommorrowWindDirection = tommorrowNoonForeast[0].wind.deg;
+  const tommorrowWindSpeed = tommorrowNoonForeast[0].wind.speed;
   return (
     <div>
       <div style={styles.body}>
@@ -202,7 +181,6 @@ export const Weather = () => {
                       weatherId={tommorrowNoonWeatherId}
                       date="tommorrow"
                     />
-                    {/* <img src={SunnyBlack} alt="晴れ" /> */}
                   </div>
                   <div style={styles.tommorowWeatherTemp}>
                     {tommorrowNoonTemp}
@@ -216,7 +194,6 @@ export const Weather = () => {
                       weatherId={tommorrowNightWeatherId}
                       date="tommorrow"
                     />
-                    {/* <img src={CloudyBlack} alt="晴れ" /> */}
                   </div>
                   <div style={styles.tommorowWeatherTemp}>
                     {tommorrowNightTemp}
@@ -237,35 +214,20 @@ export const Weather = () => {
                 </div>
               </div>
             </div>
-            <div style={styles.tomorrrowDetailSection}>
-              <div style={styles.tommorrowDetailTitle}>明日の詳細</div>
-              <div style={styles.tommorrowDetailContents}>
-                <div style={styles.tommorrowDetail}>
-                  <p>湿度</p>
-                  <p>
-                    {tommorrowHumidity}
-                    {commentUnit.unit.humidity}
-                  </p>
-                </div>
-                <div style={styles.tommorrowDetail}>
-                  <p>気圧</p>
-                  <p>
-                    {tommorrowPressure}
-                    {commentUnit.unit.pressure}
-                  </p>
-                </div>
-                <div style={styles.tommorrowDetail}>
-                  <p>風</p>
-                  <p>東13kmh</p>
-                </div>
-              </div>
-            </div>
+            <TommorrowDetail
+              tommorrowHumidity={tommorrowHumidity}
+              tommorrowPressure={tommorrowPressure}
+              tommorrowWindDirection={tommorrowWindDirection}
+              tommorrowWindSpeed={tommorrowWindSpeed}
+              unit={commentUnit}
+            />
           </section>
         </section>
       </div>
     </div>
   );
 };
+
 const styles = {
   body: {
     backgroundColor: "#F5F5F7",
@@ -283,7 +245,6 @@ const styles = {
     left: 0,
     height: 40,
     width: "100%",
-    // padding: 5,
   },
   backIcon: {
     margin: 10,
@@ -300,13 +261,10 @@ const styles = {
   contentsWrapper: {
     display: "flex",
     width: "95%",
-    // justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
     marginTop: 40,
-    // border: "1px solid",
   },
-
   todaySection: {
     backgroundColor: "#2C6FF1",
     borderRadius: "30px",
@@ -325,34 +283,26 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-end",
-    // border: "1px solid black",
   },
   todayDate: {
     fontSize: "30px",
     color: "white",
-    // margin: 2,
-    // border: "1px solid black",
   },
   todayDay: {
     fontSize: "15px",
     color: "white",
     margin: "0px 0px 7px 3px",
-    // border: "1px solid black",
   },
   todayWeather: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // border: "1px solid black",
-    // width: "100%",
     height: "150px",
-    // margin: 5,
   },
 
   currentWeatherSection: {
     width: "30%",
     height: "70%",
-    // border: "1px solid white",
     fontSize: "18px",
     color: "white",
     display: "flex",
@@ -362,20 +312,16 @@ const styles = {
   timeTiltle: {
     textAlign: "center",
     margin: 10,
-    // border: "1px solid white",
   },
   todayWeatherDetail: {
     width: "60px",
     height: "60px",
     margin: "0 auto",
-    // border: "1px solid white",
   },
   todayWeatherTemp: {
     textAlign: "center",
     margin: 10,
-    // border: "1px solid white",
   },
-
   threeHourWeatherSection: {
     width: "30%",
     height: "70%",
@@ -387,28 +333,22 @@ const styles = {
     flexDirection: "column",
     justifyContent: "center",
   },
-
   sixHourWeatherSection: {
     width: "30%",
     height: "70%",
-    // border: "1px solid white",
     fontSize: "18px",
     color: "white",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
   },
-
   tommorrowMainSection: {
-    // backgroundColor: "white",
     width: "90%",
     height: "200px",
     margin: "0px 0px 20px 0px",
   },
   tommorrowContents: {
     margin: "0 auto",
-    // display: "flex",
-    // justifyContent: "center",
     width: "100%",
   },
   tomorrowDateContents: {
@@ -417,7 +357,6 @@ const styles = {
     alignItems: "flex-end",
   },
   tommorrowWeatherContents: {
-    // width: "200px",
     padding: "0px 20px 0px 20px",
     display: "flex",
     justifyContent: "space-between",
@@ -456,14 +395,12 @@ const styles = {
     width: "0px",
     height: "0px",
     position: "absolute",
-    // background: "#eee",
     borderStyle: "solid",
     borderWidth: "5px 30px 10px 0px",
     borderColor: "transparent white transparent transparent",
     transform: "rotate(60deg)",
   },
   comment: {
-    // zIndex: 1,
     backgroundColor: "white",
     position: "relative",
     display: "inline-block",
@@ -474,20 +411,5 @@ const styles = {
     overflowWrap: "break-word",
     clear: "both",
     boxSizing: "content-box",
-  },
-  tomorrrowDetailSection: {
-    width: "45%",
-  },
-  tommorrowDetailTitle: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  tommorrowDetailContents: {
-    padding: 10,
-  },
-  tommorrowDetail: {
-    display: "flex",
-    justifyContent: "space-between",
-    borderBottom: "1px solid #707070",
   },
 };

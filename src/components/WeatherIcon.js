@@ -21,35 +21,30 @@ export const WeatherIcon = ({ weatherId, date }) => {
   // let weatherIconToday = "";
   // let weatherIconTommorrow = "";
   let weatherIcon = "";
-
+  const isToday = date === "today";
+  const cloudy = 802 <= weatherId && weatherId < 805;
   if (weatherId === 800) {
-    date === "today" ? (weatherIcon = SunnyWhite) : (weatherIcon = SunnyBlack);
-
-    // currentWeatherIcon = SunnyWhite;
+    isToday ? (weatherIcon = SunnyWhite) : (weatherIcon = SunnyBlack);
   } else if (weatherId === 801) {
-    date === "today"
+    isToday
       ? (weatherIcon = CloudySunnyWhite)
       : (weatherIcon = CloudySunnyBlack);
-  } else if (802 <= weatherId && weatherId < 805) {
-    date = "today" ? (weatherIcon = CloudyWhite) : (weatherIcon = CloudyBlack);
+  } else if (cloudy) {
+    isToday ? (weatherIcon = CloudyWhite) : (weatherIcon = CloudyBlack);
   } else if (701 <= weatherId && weatherId < 782) {
-    date === "today" ? (weatherIcon = MistWhite) : (weatherIcon = MistBlack);
+    isToday ? (weatherIcon = MistWhite) : (weatherIcon = MistBlack);
   } else if (600 <= weatherId && weatherId < 623) {
-    date === "today" ? (weatherIcon = SnowyWhite) : (weatherIcon = SnowyBlack);
+    isToday ? (weatherIcon = SnowyWhite) : (weatherIcon = SnowyBlack);
   } else if (500 <= weatherId && weatherId < 532) {
-    date === "today" ? (weatherIcon = RainyWhite) : (weatherIcon = RainyBlack);
+    isToday ? (weatherIcon = RainyWhite) : (weatherIcon = RainyBlack);
   } else if (300 <= weatherId && weatherId < 322) {
-    date === "today"
-      ? (weatherIcon = DrizzleWhite)
-      : (weatherIcon = DrizzleBlack);
+    isToday ? (weatherIcon = DrizzleWhite) : (weatherIcon = DrizzleBlack);
   } else if (200 <= weatherId && weatherId < 233) {
-    date === "today"
+    isToday
       ? (weatherIcon = ThunderStormWhite)
       : (weatherIcon = ThunderStormBlack);
   } else {
-    date === "today"
-      ? (weatherIcon = CloudyWhite)
-      : (weatherIcon = CloudyBlack);
+    isToday ? (weatherIcon = CloudyWhite) : (weatherIcon = CloudyBlack);
   }
 
   return (

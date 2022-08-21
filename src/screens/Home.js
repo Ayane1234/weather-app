@@ -6,9 +6,7 @@ import { RegionCard } from "../components/RegionCard";
 export const Home = () => {
   // const apikey = "ca3f6ffe199e9fd3f27d3d022faeef47";
   console.log("prefectures:", prefectures);
-  const Tohoku = prefectures.tohoku.map((prefecture) => {
-    console.log(prefecture);
-  });
+
   return (
     <div style={styles.body}>
       <Header title="お天気検索アプリ" />
