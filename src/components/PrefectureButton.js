@@ -1,7 +1,6 @@
 import React from "react";
 
 export const PrefectureButton = ({ title }) => {
-  //   console.log("title:", title);
   return (
     <div>
       <div style={styles.prefecture}>{title}</div>
