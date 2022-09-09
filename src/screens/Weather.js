@@ -1,24 +1,66 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TommorrowDetail } from "../components/TommorrowDetail";
 import Book from "../img/book.png";
 import BackIcon from "../img/back-icon.svg";
 import { testData } from "../api/testDataApi";
 import { dateFormat } from "../function/dateFormat";
-
 import { commentUnit } from "../display/commentUnit";
 import { WeatherIcon } from "../components/WeatherIcon";
+import axios from "axios";
 
 export const Weather = () => {
+  const [post, setPost] = useState(null);
+  const baseUrl =
+    "https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=ca3f6ffe199e9fd3f27d3d022faeef47";
+  // const baseUrl = "https://api.openweathermap.org";
+  const lat = 35;
+  const apikey = "ca3f6ffe199e9fd3f27d3d022faeef47";
+  const url = `${baseUrl}/data/2.5/forecast?`;
+  // console.log("url:", url);
+  // console.log("baseUrl:", baseUrl);
+
+  useEffect(() => {
+    const axios = require("axios").default;
+    axios
+      .get(baseUrl)
+      .then((response) => {
+        setPost(response.data);
+      })
+      .catch((error) => {
+        console.log("error:", error);
+      });
+  }, []);
+  console.log("post:", post);
+  if (!post) return null;
+  // axios
+  //   .get(
+  //     "https://api.openweathermap.org/data/2.5/forecast?lat=35&lon=139&appid=ca3f6ffe199e9fd3f27d3d022faeef47"
+  //   )
+  //   .then(function (response) {
+  //     console.log("response:", response);
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
+
   //　APIで取得するときは、摂氏で取得するパラメータをつける"&units=metric"
   // 8-15 9:38のデータ
-  const getForecastTimestamp = testData.list[0].dt;
+  // const getForecastTimestamp = testData.list[0].dt;
+  const getForecastTimestamp = post.list[0].dt;
+  console.log("getForecastTimestamp:", getForecastTimestamp);
+
   const getForecastCurrentTimeObject = new Date(getForecastTimestamp * 1000);
+  console.log("getForecastCurrentTimeObject:", getForecastCurrentTimeObject);
+
   const getForecastCurrentTime = dateFormat(
     getForecastCurrentTimeObject,
     "YYYY-MM-DD hh"
   );
-  const today = new Date("2022/8/15 21:38:50");
+  const today = new Date();
+  // console.log("today:", today);
+  // const today = new Date("2022/8/15 21:38:50");
   const currentTime = dateFormat(today, "YYYY-MM-DD hh");
+  console.log("currentTime:", currentTime);
 
   // 今日の天気の取得
   let currentTemp = "";
@@ -29,19 +71,19 @@ export const Weather = () => {
   let sixHourWeatherId = "";
 
   if (getForecastCurrentTime === currentTime) {
-    currentTemp = testData.list[0].main.temp;
-    threeHourTemp = testData.list[1].main.temp;
-    sixHourTemp = testData.list[2].main.temp;
-    currentWeatherId = testData.list[0].weather[0].id;
-    threeHourWeatherId = testData.list[1].weather[0].id;
-    sixHourWeatherId = testData.list[2].weather[0].id;
+    currentTemp = post.list[0].main.temp;
+    threeHourTemp = post.list[1].main.temp;
+    sixHourTemp = post.list[2].main.temp;
+    currentWeatherId = post.list[0].weather[0].id;
+    threeHourWeatherId = post.list[1].weather[0].id;
+    sixHourWeatherId = post.list[2].weather[0].id;
   } else {
-    currentTemp = testData.list[1].main.temp;
-    threeHourTemp = testData.list[2].main.temp;
-    sixHourTemp = testData.list[3].main.temp;
-    currentWeatherId = testData.list[1].weather[0].id;
-    threeHourWeatherId = testData.list[2].weather[0].id;
-    sixHourWeatherId = testData.list[3].weather[0].id;
+    currentTemp = post.list[1].main.temp;
+    threeHourTemp = post.list[2].main.temp;
+    sixHourTemp = post.list[3].main.temp;
+    currentWeatherId = post.list[1].weather[0].id;
+    threeHourWeatherId = post.list[2].weather[0].id;
+    sixHourWeatherId = post.list[3].weather[0].id;
   }
 
   // 表示用日付の取得
@@ -73,7 +115,7 @@ export const Weather = () => {
   const tommorrowMorningTime = formatedToday.concat(" 21:00:00");
   const tommorrowNoonTime = formatedTommorrow.concat(" 03:00:00");
   const tommorrowNightTime = formatedTommorrow.concat(" 12:00:00");
-  const tommorowMorningForecast = testData.list.filter(
+  const tommorowMorningForecast = post.list.filter(
     (list) => list.dt_txt === tommorrowMorningTime
   );
 
